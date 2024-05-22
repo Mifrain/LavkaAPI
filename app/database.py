@@ -10,4 +10,4 @@ async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 # For migrations
 class Base(DeclarativeBase):
-    pass
+    __allow_unmapped__ = True

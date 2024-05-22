@@ -58,4 +58,57 @@ class ProductsCRUD:
             product = Products(**product_in.model_dump())  #model_dump - преобразовывает в словарь
             session.add(product)
             await session.commit()
+
+#
+
+
+
+class LavkaCRUD:
+    
+    # Добавить
+    @classmethod
+    async def add_product_to_lavka(cls, lavka_in: SLavka):
+        async with async_session() as session:
+            product = Lavka(**lavka_in.model_dump())  #model_dump - преобразовывает в словарь
+            session.add(product)
+            await session.commit()
+            await session.refresh(product)
+            # product.update_expired_date()
+            
+    
+    # Все продукты во всех магазинах        
+    @classmethod
+    async def get_all_products_from_lavkas(cls):
+        async with async_session() as session:
+            stat = select(Lavka).order_by(Lavka.id)
+            result: Result = await session.execute(stat)
+            products = result.scalars().all()
+            return products
+    
+    # Все продукты в 1 магазине
+    @classmethod
+    async def get_products_from_lavka(cls, market_id: int):
+        async with async_session() as session:
+            stat = select(Lavka).filter_by(market_id=market_id).order_by(Lavka.id)
+            result: Result = await session.execute(stat)
+            products = result.scalars().all()
+            return products
+
+    # Продукт в 1 магазине
+    @classmethod
+    async def get_product_from_lavka(cls, product_id: int, market_id: int):
+        async with async_session() as session:
+            stat = select(Lavka).filter_by(market_id=market_id, product_id=product_id)
+            result: Result = await session.execute(stat)
+            product = result.scalar_one_or_none()
+            return product
+    
+    # Обновить
+    # @classmethod
+    # async def update_product_expired_date(cls, lavka_prod: Lavka):
+    #     async with async_session() as session:
+    #         print(lavka_prod.product)
+    #         # lavka_prod.expired_date = lavka_prod.arrived_date + timedelta(days=lavka_prod.product.expiration_days)
+    #         # await session.commit()    
+            
     

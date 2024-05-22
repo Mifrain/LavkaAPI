@@ -17,3 +17,9 @@ class SProducts(BaseModel):
     
     # Для ORM
     model_config = ConfigDict(from_attributes=True) 
+
+
+class SLavka(BaseModel):
+    product_id: int
+    market_id: int
+    amount: int
