@@ -62,7 +62,7 @@ LavkaAPI - это API для управления заказами и товар
 
 7. Запустите приложение:
    ```console
-   python app.py
+   uvicorn app.main:app --reload
    ```
 
 ### Обзор функциональности
